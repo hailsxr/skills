@@ -1,0 +1,4 @@
+interface:
+  display_name: "Re-review Latest PR Commit"
+  short_description: "Re-trigger Codex on the latest PR commit"
+  default_prompt: "Use $gh-rereview-latest-commit to trigger a Codex review limited to the current PR head commit."

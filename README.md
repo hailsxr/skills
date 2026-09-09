@@ -6,9 +6,10 @@ Claude Code discovers skills in `~/.claude/skills/`, so the installed skill is a
 
 ## Skills
 
-| skill      | purpose                                                                                          |
-| ---------- | ------------------------------------------------------------------------------------------------ |
-| `delegate` | Fan independent subtasks out to background subagents, keep working, shepherd them to done.        |
+| skill        | purpose                                                                                        |
+| ------------ | ---------------------------------------------------------------------------------------------- |
+| `babysit-pr` | Watch a PR for bot review findings and CI, fix valid ones, repush, re-review the delta.         |
+| `delegate`   | Fan independent subtasks out to background subagents, keep working, shepherd them to done.      |
 
 ## Install
 

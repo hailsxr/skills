@@ -54,7 +54,7 @@ Judge each finding against the repository's own standards (its agent instruction
 
 Go back to step 2 with fresh baselines. Bound the process:
 
-- After **3–4 rounds** without reaching clean, stop and report — recurring rounds usually mean the bot is nitpicking or a disagreement needs the user.
+- After **6 rounds** without reaching clean, stop and report — recurring rounds usually mean the bot is nitpicking or a disagreement needs the user.
 - Wind down when: the bot's latest pass is clean **and** CI is green (report the PR as ready), or all remaining findings are disputed-with-reply, or a finding is blocked on the user.
 
 ## 7. Final report

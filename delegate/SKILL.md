@@ -16,24 +16,27 @@ Split work across background subagents, keep making progress yourself, and sheph
 
 Higher = better. Cost is what the user pays; intelligence is how hard a problem the model takes unsupervised; taste covers UI/UX, code quality, API design, and copy.
 
-| model         | cost | intelligence | taste |
-| ------------- | ---- | ------------ | ----- |
-| gpt-5.6-sol   | 9    | 8            | 5     |
-| gpt-5.6-terra | 9    | 5            | 4     |
-| sonnet-5      | 5    | 5            | 5     |
-| opus-5        | 4    | 9            | 8     |
+| model       | cost | intelligence | taste |
+| ----------- | ---- | ------------ | ----- |
+| gpt-6-sol   | 8    | 8            | 5     |
+| gpt-6-astra | 5    | 9            | 6     |
+| opus-5.5    | 4    | 7            | 8     |
+| sonnet-5    | 5    | 3            | 5     |
 
-- **Bulk/mechanical** (clear-spec implementation, data analysis, migrations): gpt-5.6-sol.
-- **User-facing** (UI, copy, API design): taste >= 7.
-- **Reviews of plans/implementation**: opus-5, plus gpt-5.6-sol for an independent second read.
-- **Never Haiku. Never fable-5** — it needs extended credits, which are off by default and stay off.
+- **Default** (clear-spec implementation, data analysis, migrations, backend): gpt-6-sol — the workhorse.
+- **Hard or high-stakes non-UI work**, or Sol missed the bar: gpt-6-astra.
+- **Subtasks that are mainly UI/UX** (or user-facing copy): taste >= 7, i.e. opus-5.5. Incidental UI inside a GPT agent's task stays with that agent — don't split it out; catch any design weirdness yourself when integrating.
+- **Reviews of plans/implementation**: gpt-6-sol as the primary read (gpt-6-astra for high-stakes changes), plus opus-5.5 as a second read focused on code quality and UI taste.
+- **sonnet-5 is only the codex wrapper** (below) — never assign it real work.
+- **Never Haiku. Never Fable** (5 or 5.1) as a subagent — Fable only gets 50% of the weekly limit, and subagent work isn't worth spending it on.
 - Cost is a tie-breaker only; when axes conflict, intelligence > taste > cost. Defaults, not limits — if a cheaper model misses the bar, rerun on a smarter one without asking.
 
-**Name every agent `<model>:<task>`**, whatever the model — `opus-5:design-settings-sheet`, `gpt-5.6-sol:review-auth`. This label (`description` on the Agent tool, `label` in workflows) is how the user tells the parallel runs apart. Use the table's names; on a codex wrapper name the real worker, not the wrapper's Claude model, since the UI already shows that. Escalating a task means relabelling it.
+**Name every agent `<model>:<task>`**, whatever the model — `opus-5.5:design-settings-sheet`, `gpt-6-sol:review-auth`. This label (`description` on the Agent tool, `label` in workflows) is how the user tells the parallel runs apart. Use the table's names; on a codex wrapper name the real worker, not the wrapper's Claude model, since the UI already shows that. Escalating a task means relabelling it.
 
-Reaching gpt-5.6 (Codex CLI only; the user's `~/.codex/config.toml` defaults to gpt-5.6-sol):
+Reaching gpt-6 (Codex CLI only; the user's `~/.codex/config.toml` defaults to gpt-6-sol, so Astra needs `-m gpt-6-astra`):
 
 - `model` takes Claude models only, so wrap it: a thin `model: 'sonnet'` low-effort agent that writes a self-contained codex prompt, runs `codex exec` via Bash, and returns the report. `schema` gets structured output back.
+- Run `codex exec` with stdin from `/dev/null` (otherwise it waits on stdin) and `-o <file>` to capture the final message.
 - Codex runs can outlast Bash's 10-minute timeout — pass an explicit timeout, or background it and poll for the report file.
 - Workflow budgets count Claude tokens only; codex work is invisible to `budget.spent()`.
 - On "unavailable", retry after a few seconds; switch models after 3 failures.

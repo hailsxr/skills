@@ -9,7 +9,7 @@ Claude Code discovers skills in `~/.claude/skills/`, so the installed skill is a
 | skill                | purpose                                                                                    |
 | -------------------- | ------------------------------------------------------------------------------------------ |
 | `babysit-pr`         | Watch a PR for bot review findings and CI, fix valid ones, repush, re-review the delta.     |
-| `codex-computer-use` | Hand browser/desktop computer use to Codex, then verify its screenshots yourself.           |
+| `codex-computer-use` | Drive a browser or desktop app through Codex, then check its screenshots yourself.          |
 | `delegate`           | Fan independent subtasks out to background subagents, keep working, shepherd them to done.  |
 
 ## Install

@@ -43,6 +43,14 @@ Judge each finding against the repository's own standards (its agent instruction
 - Run the repository's full verification gate (tests, lint, build — whatever the repo defines) before every push. Never push a fix you haven't verified locally.
 - Push to the PR branch. Do not force-push during a review cycle; reviewers and threads anchor to commits.
 
+### Stacked PRs
+
+Every push re-runs full CI on that PR, so restacking an N-layer stack after each fix costs N CI runs for a change that touched one layer. One evening of per-fix restacks on an 8-PR stack burned ~370 Actions minutes.
+
+- Push each fix only to the layer that owns the finding. Layers above don't need it to be reviewed; their re-reviews are scoped to their own commits.
+- Don't restack after each fix. Restack once, when the whole stack is clean and ready to merge, or earlier only if a higher layer genuinely needs the fix to build or pass.
+- When a restack is unavoidable, batch it: finish the round's fixes across every layer first, then restack and push all layers in one pass, never layer by layer.
+
 ## 5. Reply to every finding, then re-review the delta only
 
 - Reply on each finding's thread naming the commit that addressed it:

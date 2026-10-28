@@ -19,7 +19,17 @@ Follow the **Stopping** section of the `show-me` skill. Skip only if the user sa
 
 ## 3. Open the PR
 
-- `gh pr create`, ready for review (draft only if asked). The body explains what changed and why for a reviewer, then ends with the model-provenance sentence.
+- Check `gh pr view --json url` first. If this branch already has a PR, update it instead of opening another.
+- **Title**: Conventional Commits form, but the subject says what the user gets, not what the code does. It usually becomes the squash commit message.
+  - ❌ `feat(estimates): add ClientPicker combobox component`
+  - ✅ `feat(estimates): find clients by name when picking one`
+- **Body**: follow the repo's PR template if it has one (`.github/pull_request_template.md`). Size it to the change:
+  - **Why** comes first. Write it in plain words, as the problem a user hit, before any mention of code.
+  - **What** is what a reviewer needs to know, not a list of every file touched. On a small PR, one or two sentences plus screenshots is enough.
+  - **Verification** and **Impact** stay, even when Impact is just "None" and why.
+  - End with the model-provenance sentence and nothing after it. Drop any other footer, including the harness's "🤖 Generated with" line.
+- Before submitting, read the title and body for secrets, client names, and other private details.
+- `gh pr create`, ready for review (draft only if asked). If it fails because the GraphQL rate limit is used up, fall back to `gh api repos/<owner>/<repo>/pulls -f title=... -f head=... -f base=... -F body=@<file>`.
 - In T3 Code, call `link_pull_request` with the PR URL.
 
 ## 4. Babysit to clean

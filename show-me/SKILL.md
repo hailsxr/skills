@@ -14,13 +14,13 @@ The user runs many worktrees of the same apps at once. Everything here is scoped
 
 ## 2. Start it
 
-- Start the way the repo says to: its agent docs, `README`, `docs/engineering/dev-*.md`, and `package.json` scripts. Janus and Delphi run a local Convex backend plus seed data; follow their docs rather than pointing at a shared cloud deployment.
+- Start the way the repo says to: its agent docs, `README`, `docs/engineering/dev-*.md`, and `package.json` scripts. If the repo runs a local backend (e.g. local Convex plus seed data), use it rather than pointing at a shared cloud deployment.
 - Pick ports that are free right now for every server (Next, local Convex backend, etc.). Never take a port another worktree holds.
 - Run servers with `run_in_background`, then poll until the app URL returns 200. Done when the page loads.
 
 ## 3. Sign in
 
-Prefer the repo's dev-only login (personas). Otherwise use Google sign-in and pick the robert.hails@palyrian.com account from the chooser. Never type a password or 2FA code; stop and report if asked for one.
+Prefer the repo's dev-only login (personas). Otherwise use the sign-in the repo's docs specify. If more than one account could fit, ask the user which one and use it for the rest of the session. Never type a password or 2FA code; stop and report if asked for one.
 
 ## 4. Capture
 

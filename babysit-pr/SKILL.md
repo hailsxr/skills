@@ -29,6 +29,21 @@ Run the watch loop as a **background** Bash task (never foreground sleep) so the
 - Detect an in-flight bot review where possible (e.g. Codex's summary comment says "Running") and don't declare ALL_CLEAR while one is running.
 - After the task fires, read its output file for the marker, then fetch the actual finding bodies with `gh api .../pulls/<n>/comments`.
 
+### When a bot is stuck
+
+Bots stall: they never start, sit on "Running" forever, run out of quota, or keep reviewing an old commit. Silence is never approval, so a stuck bot blocks ALL_CLEAR. Treat a bot as stuck when any of these hold:
+
+- No sign of it (comment, review, reaction, or check) ~15 min after the push or re-review request. Bots usually start within 1–5 min.
+- Its in-progress marker (a "Running" summary, 👀 reaction, or pending check) hasn't changed in ~15 min.
+- It says it's rate-limited, out of usage, paused, or errored.
+- Its latest review is on an older commit and nothing is running for HEAD.
+
+Then:
+
+1. **Rate-limited with a stated wait** → wait that long in the background, then re-request once.
+2. **Otherwise, nudge once** → re-request the review using that bot's own trigger (find it in its earlier comments or the repo's docs, e.g. `@codex review`, `@coderabbitai review`), scoped to HEAD as in step 5. One nudge per commit per bot; repeated pings spam the PR and burn the bot's quota.
+3. **Still stuck ~15 min later** → stop and hand back. Say which bot, the last commit it reviewed, what it last said, and what you tried. The user decides whether to wait, trigger it by hand, or go ahead without it.
+
 ## 3. Triage — bots are not automatically right
 
 Judge each finding against the repository's own standards (its agent instructions, contributing docs, safety policies) and the actual code:
@@ -63,11 +78,11 @@ Every push re-runs full CI on that PR, so restacking an N-layer stack after each
 Go back to step 2 with fresh baselines. Bound the process:
 
 - After **6 rounds** without reaching clean, stop and report — recurring rounds usually mean the bot is nitpicking or a disagreement needs the user.
-- Wind down when: the bot's latest pass is clean **and** CI is green (report the PR as ready), or all remaining findings are disputed-with-reply, or a finding is blocked on the user.
+- Wind down when: the bot's latest pass is clean **and** CI is green (report the PR as ready), or all remaining findings are disputed-with-reply, or a finding or a stuck bot is blocked on the user.
 
 ## 7. Final report
 
-State the outcome first: PR ready or blocked, latest review verdict, CI status. Then the ledger: findings received, which were fixed (with commits), which were disputed and why, and anything left for the user. Report faithfully — a skipped or disputed finding is stated as such, not glossed as fixed.
+State the outcome first: PR ready or blocked, latest review verdict (or which bot is stuck), CI status. Then the ledger: findings received, which were fixed (with commits), which were disputed and why, and anything left for the user. Report faithfully — a skipped or disputed finding is stated as such, not glossed as fixed.
 
 ## Safety
 

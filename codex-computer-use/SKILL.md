@@ -28,7 +28,7 @@ codex exec -s workspace-write --skip-git-repo-check \
 
 - `< /dev/null` is required or it hangs waiting on stdin.
 - Use `run_in_background` and keep working. You'll be notified when it's done.
-- Defaults to `gpt-6-sol`. Add `-m gpt-6-astra` only if Sol fails a tricky flow.
+- Defaults to `gpt-6.1-sol`. Add `-m gpt-6-astra` only if Sol fails a tricky flow.
 
 ## Verify
 

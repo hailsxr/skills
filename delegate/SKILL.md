@@ -18,28 +18,29 @@ Higher = better. Cost is what the user pays, intelligence is how hard a problem 
 
 | model       | cost | intelligence | taste |
 | ----------- | ---- | ------------ | ----- |
-| gpt-6-sol   | 8    | 8            | 5     |
+| gpt-6.1-sol | 8    | 8            | 5     |
 | gpt-6-astra | 5    | 9            | 6     |
 | opus-5.5    | 4    | 7            | 8     |
 | sonnet-5    | 5    | 3            | 5     |
 
-- **Default**: gpt-6-sol. Implementation, migrations, data work, backend.
+- **Default**: gpt-6.1-sol. Implementation, migrations, data work, backend.
 - **Hard or high-stakes non-UI work**, or Sol missed: gpt-6-astra.
 - **Mainly UI/UX or user-facing copy**: opus-5.5. Small UI bits inside a GPT task stay with that agent. You catch design issues when integrating.
-- **Reviews**: gpt-6-sol first (astra if high-stakes), then opus-5.5 for quality and taste.
+- **Reviews**: gpt-6.1-sol first (astra if high-stakes), then opus-5.5 for quality and taste.
 - **sonnet-5** is only the codex wrapper. Never give it real work.
 - **Never Haiku. Never Fable** (5 or 5.1): it only gets 50% of the weekly limit.
 - When scores conflict: intelligence > taste > cost. If a cheaper model's work isn't good enough, rerun on a smarter one without asking.
 
-**Label every agent `<model>:<task>`**, e.g. `opus-5.5:design-settings-sheet`, `gpt-6-sol:review-auth`. It's the `description` on the Agent tool or `label` in workflows, and it's how the user tells runs apart. For codex wrappers, name the GPT model, not the wrapper. Relabel when you escalate.
+**Label every agent `<model>:<task>`**, e.g. `opus-5.5:design-settings-sheet`, `gpt-6.1-sol:review-auth`. It's the `description` on the Agent tool or `label` in workflows, and it's how the user tells runs apart. For codex wrappers, name the GPT model, not the wrapper. Relabel when you escalate.
 
-**Reaching GPT** (Codex CLI only; defaults to gpt-6-sol, use `-m gpt-6-astra` for Astra):
+**Reaching GPT** (Codex CLI only; defaults to gpt-6.1-sol at high effort via `~/.codex/config.toml`, use `-m gpt-6-astra` for Astra):
 
 - `model` only takes Claude models, so wrap it: a low-effort `model: 'sonnet'` agent writes a self-contained prompt, runs `codex exec` via Bash, and returns the report. Use `schema` for structured output.
 - Run with `< /dev/null` (or it hangs on stdin) and `-o <file>` to capture the final message.
 - Runs can outlast Bash's 10-minute timeout. Set a timeout, or background it and wait for the report file.
 - Workflow budgets only count Claude tokens. Codex work doesn't show in `budget.spent()`.
 - On "unavailable", retry after a few seconds. Switch models after 3 failures.
+- Launchers that don't read the Codex config (e.g. a harness's own delegate tool) may default Sol to low effort. Set the reasoning effort explicitly.
 
 Agents that might edit files at the same time get `isolation: 'worktree'`, codex ones included.
 

@@ -10,6 +10,7 @@ Claude Code discovers skills in `~/.claude/skills/`, so the installed skill is a
 | -------------------- | ------------------------------------------------------------------------------------------ |
 | `babysit-pr`         | Watch a PR for bot review findings and CI, fix valid ones, repush, re-review the delta.     |
 | `codex-computer-use` | Drive a browser or desktop app through Codex, then check its screenshots yourself.          |
+| `council`            | Get a read-only review from Claude Opus and GPT Sol, fix, and loop until both are satisfied. |
 | `delegate`           | Fan independent subtasks out to background subagents, keep working, shepherd them to done.  |
 | `ship`               | Stop worktree dev servers, open the PR, babysit to clean, merge only when told to.          |
 | `show-me`            | Bring up this worktree's dev env, signed in, and bring back checked screenshots.            |
